@@ -17,6 +17,7 @@ namespace Delaunay_triangulation
         private List<Point> points = new List<Point>();
         private List<Edge> edges = new List<Edge>();
         private List<Edge> living_edges = new List<Edge>();
+        private List<Triangle> triangles = new List<Triangle>();
         private SolidBrush brush1 = new SolidBrush(Color.Red);
         private SolidBrush brush2 = new SolidBrush(Color.Blue);
         private Pen pen = new Pen(Color.Black, 1);
@@ -122,6 +123,8 @@ namespace Delaunay_triangulation
         // Триангуляция Делоне
         private void triangBtn_Click(object sender, EventArgs e)
         {
+            bool edgeIsFound = false;
+
             redrawTriangulation();
 
             Point firstPoint = findFirstPoint(points);
@@ -159,12 +162,15 @@ namespace Delaunay_triangulation
 
                 if (thirdPoint != Point.Empty)
                 {
+                    triangles.Add(new Triangle(alive.p1, alive.p2, thirdPoint));
+
                     Edge edge = new Edge(alive.p1, thirdPoint);
                     int ind = living_edges.FindIndex(new Predicate<Edge>(_edge => _edge.Equals(edge.reverse())));
                     if (ind >= 0)
                     {
                         drawEdge(living_edges[ind]);
                         living_edges.RemoveAt(ind);
+                        
                     }
                     else
                         living_edges.Add(edge);
@@ -175,11 +181,18 @@ namespace Delaunay_triangulation
                     {
                         drawEdge(living_edges[ind]);
                         living_edges.RemoveAt(ind);
+                        edgeIsFound = true;
                     }
                     else
                         living_edges.Add(edge);
+
+                    if (edgeIsFound)
+                    {
+                        edgeIsFound = false;
+                    }
                 }
             }
+            Console.WriteLine(triangles.Count);
             pictureBox1.Invalidate();
         }
 
