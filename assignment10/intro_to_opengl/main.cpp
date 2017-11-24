@@ -50,6 +50,20 @@ void renderWireOctahedron()
 	glutSwapBuffers();
 }
 
+void renderWireTeapot() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	glRotatef(rotateX, 1.0, 0.0, 0.0);
+	glRotatef(rotateY, 0.0, 1.0, 0.0);
+	glRotatef(rotateZ, 0.0, 0.0, 1.0);
+
+	glutWireTeapot(0.5);
+
+	glFlush();
+	glutSwapBuffers();
+}
+
 void renderColoredTriangle()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -91,7 +105,7 @@ void renderColoredRectangle()
 
 
 void mouseClick(int button, int state, int x, int y) {
-	if (button == GLUT_LEFT_BUTTON)
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 		renderColoredTriangle();
 }
 
@@ -127,7 +141,7 @@ int main(int argc, char* argv[]) {
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("Assignment 10");
 
-	glutDisplayFunc(renderWireOctahedron);
+	glutDisplayFunc(renderWireTeapot);
 	glutSpecialFunc(specialKeys);
 	glutMouseFunc(mouseClick);
 
